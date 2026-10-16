@@ -195,7 +195,7 @@ details summary{cursor:pointer;color:var(--accent)}
 </section>
 
 <section class="panel" id="p-age85">
-  <div class="info" style="margin-bottom:10px"><b>本分頁為衝擊評估</b>：目前愛心號門檻仍為 90 歲、尚未調整；以下為「若改為 85 歲」的推估（假設 85–89 歲全數改發 C 號，為上限估計；2024 年 1–2 月為規則切換期，不計入）。</div>
+  <div class="info" style="margin-bottom:10px"><b>本分頁為衝擊評估</b>：目前愛心號門檻仍為 90 歲、尚未調整；以下為「若改為 85 歲」的推估（假設 85–89 歲全數改發 C 號，為上限估計；2024 年 1–2 月為規則切換期，不計入）。<b>評估結論（10/15 更新）：</b>愛心號現僅比 B 號快約 1 分，改後只差 0.3～0.7 分、8–9 時反轉，達不到「長輩優先」的效果；愛心櫃台另負責全院特殊劑型衛教，量增 2.2 倍會排擠衛教。建議維持 90 歲；若院方推動則依下方配套（詳見「愛心號85歲評估」主任版／副院長版簡報）。</div>
   <div class="kpis" id="ag-kpis"></div>
   <div class="grid" style="margin-top:12px">
     <div class="card span6"><h3>ABCD 平日日均張數：現行 vs 調整後<small>2026 正常平日</small></h3><div class="legend" id="ag-l1"></div><div class="chart" id="ag-c1"></div><div id="ag-t1"></div></div>
@@ -546,7 +546,7 @@ function renderAge(){
     `<div class="rec"><h4>③ 85–89 歲慢箋導向預約領藥</h4><p>移轉者中現場慢箋僅約 ${fmt0(AG.by_year[2026].shift.D)} 張／日，「藥來速」預約領藥可分流的量有限；主力仍是第二窗口與 B 台支援，宣導可同步進行。</p></div>`,
     `<div class="rec"><h4>④ 依年齡分階段、可計數的判準</h4><p>若推動，先將門檻降到 88 歲試行一個月（概估 ${fmt0((AG.by_year[2026].shift.A+AG.by_year[2026].shift.B+AG.by_year[2026].shift.D)*0.4)} 張／日）。主判準（與試行前一月同口徑比較）：愛心櫃台單小時 ≥40 張每月 ≤5 次、B 號候藥 >20 分的小時數不多於前一月、相關客訴 0 件；監測值：B 相對 A 的候藥差距（預期約 +0.3 分，超過 +1.0 分即退回 90 歲）。達標再降至 85 歲。</p></div>`,
     `<div class="rec"><h4>⑤ 與 D 號儲位調整併行時</h4><p>先前評估：D 儲位調整 3–5 格可讓 D 候藥維持約 14 分，但無法紓解 B＋C 組；20 格以上需先延長 D 台開台時段或增加人力。</p></div>`,
-    `<div class="rec"><h4>⑥ 對病人的好處要一起說（本案為評估，目前尚未調整）</h4><p>85–89 歲病人候藥由 ${fmt(e.GE85.cur_shift_group)} 分降到約 ${fmt(e.GE85.low)}～${fmt(e.GE85.high)} 分、在愛心櫃台有座位與專人說明；整體平均候藥只增加 ${fmt(e.ALL.low-e.ALL.cur,1)}～${fmt(e.ALL.high-e.ALL.cur,1)} 分。</p></div>`,
+    `<div class="rec"><h4>⑥ 評估結論（10/15 更新）：建議維持 90 歲</h4><p>愛心號現僅比 B 號快 ${fmt(e.B.cur-e.C.cur,1)} 分，改後只差 ${fmt(e.B.low-e.C.high,1)}～${fmt(e.B.high-e.C.low,1)} 分、8–9 時反轉，優先效果消失；愛心櫃台另負責全院特殊劑型衛教，量增後會排擠衛教。85–89 歲長者個人雖快約 ${fmt(e.GE85.cur_shift_group-e.GE85.high,1)} 分（有座位與專人說明），仍建議維持 90 歲；若院方推動則依 ①～⑤ 配套。</p></div>`,
   ].join('');
 }
 function sgn(v){ return (v>0?'+':'')+fmt(v,1); } function sgnp(v){ return (v>0?'+':'')+fmt(v,1)+'%'; }
