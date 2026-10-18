@@ -195,7 +195,7 @@ details summary{cursor:pointer;color:var(--accent)}
 </section>
 
 <section class="panel" id="p-age85">
-  <div class="info" style="margin-bottom:10px"><b>本分頁為衝擊評估</b>：目前愛心號門檻仍為 90 歲、尚未調整；以下為「若改為 85 歲」的推估（假設 85–89 歲全數改發 C 號，為上限估計；2024 年 1–2 月為規則切換期，不計入）。<b>評估結論（10/15 更新）：</b>愛心號現僅比 B 號快約 1 分，改後只差 0.3～0.7 分、早上尖峰持平，達不到「長輩優先」的效果；愛心櫃台另負責全院門診特殊劑型衛教，量增 2.2 倍會排擠衛教。建議維持 90 歲；若院方推動則依下方配套（詳見「愛心號85歲評估」主任版／副院長版簡報）。</div>
+  <div class="info" style="margin-bottom:10px"><b>本分頁為衝擊評估</b>：目前愛心號門檻仍為 90 歲、尚未調整；以下為「若改為 85 歲」的推估（上限＝85 歲以上目前拿 A／B／D 號者全數改發 C 號，資料無逐歲年齡；2024 年 1–2 月為規則切換期，不計入）。<b>評估結論（10/15 更新）：</b>愛心號現僅比 B 號快約 1 分，改後只差 0.3～0.7 分、早上尖峰持平，達不到「長輩優先」的效果；愛心櫃台另負責全院門診特殊劑型衛教，量增 2.2 倍會排擠衛教。建議維持 90 歲；若院方推動則依下方配套（詳見「愛心號85歲評估」主任版／副院長版簡報）。</div>
   <div class="kpis" id="ag-kpis"></div>
   <div class="grid" style="margin-top:12px">
     <div class="card span6"><h3>ABCD 平日日均張數：現行 vs 調整後<small>2026 正常平日</small></h3><div class="legend" id="ag-l1"></div><div class="chart" id="ag-c1"></div><div id="ag-t1"></div></div>
@@ -518,7 +518,7 @@ function renderAge(){
     kpi('每日改發 C 號的領藥單', fmt0(y.shift.A+y.shift.B+y.shift.D), '張／日', {text:`2026 年至 ${D.meta.last_date.slice(5).replace('-','/')} 共 ${fmt0(AG.by_year[2026].total_shift_year)} 張（占 ${fmt(y.pct,1)}%）；A −${fmt0(y.shift.A)}、B −${fmt0(y.shift.B)}、D −${fmt0(y.shift.D)}`}),
     kpi('C 號平日日均', fmt0(y.cur.C)+' → '+fmt0(y.new.C), '張', {text:`約 ${fmt(y.new.C/y.cur.C,1)} 倍；週六 ${fmt0(y.sat_cur.C)} → ${fmt0(y.sat_new.C)} 張`}),
     kpi('B、C 號候藥', '+'+fmt(Math.min(e.B.d_low,e.C.d_low),1)+'～'+fmt(Math.max(e.B.d_high,e.C.d_high),1), '分', {text:`B ${fmt(e.B.cur)}→${fmt(e.B.low)}～${fmt(e.B.high)}；C ${fmt(e.C.cur)}→${fmt(e.C.low)}～${fmt(e.C.high)}`, cls:'up'}),
-    kpi('85–89 歲病人候藥', fmt(e.GE85.cur_shift_group)+' → '+fmt(e.GE85.high), '分', {text:`改發 C 號後快約 ${fmt(e.GE85.cur_shift_group-e.GE85.high,1)} 分；A、D 號各快 ${fmt(-e.A.d_low,1)}／${fmt(-e.D.d_low,1)} 分`, cls:'down'}),
+    kpi('85 歲以上原拿一般號者候藥', fmt(e.GE85.cur_shift_group)+' → '+fmt(e.GE85.high), '分', {text:`改發 C 號後快約 ${fmt(e.GE85.cur_shift_group-e.GE85.high,1)} 分；A、D 號各快 ${fmt(-e.A.d_low,1)}／${fmt(-e.D.d_low,1)} 分`, cls:'down'}),
     kpi('愛心櫃台單一小時 ≥40 張', fmt(p.per_month_cur_ge40,1)+' → '+fmt(p.per_month_new_ge40,1), '次／月', {text:`單日最高 ${p.cur_max} → ${p.new_max} 張／時（超過現行處理過的最高量）`, cls:'up'}),
   ].join('');
   legend($('#ag-l1'), [{name:'現行', color:'var(--y1)'},{name:'調整後', color:'var(--y3)'}]);
@@ -536,17 +536,17 @@ function renderAge(){
   lineChart($('#ag-c3'), {xlabels: M.map(m=>m.ym), series:[{name:'每月可移轉張數', color:'var(--s3)', vals: M.map(m=>m.shift)}], yd:0, xevery:3, xrot:true, labelEnds:true, aria:'每月移轉張數'});
   const Mf = M.filter(m=>m.ym < D.meta.last_date.slice(0,7)); $('#ag-n3').textContent = `2024 年 3 月起每個完整月份 ${fmt0(Math.min(...Mf.map(m=>m.shift)))}～${fmt0(Math.max(...Mf.map(m=>m.shift)))} 張穩定（2024 年 1–2 月為愛心號規則切換期，不計入評估）；85 歲以上占領藥單 ${fmt(AG.by_year[2024].ge85_share,1)}%（2024）→ ${fmt(AG.by_year[2026].ge85_share,1)}%（2026），其中已是 C 號的比例 ${fmt(AG.by_year[2024].ge85_C_share,0)}% → ${fmt(AG.by_year[2026].ge85_C_share,0)}%。`;
   // 候藥估計表
-  const rg = AG.reg; const rows = [['A 號', fmt(e.A.cur), fmt(e.A.low)+(e.A.low!==e.A.high?'～'+fmt(e.A.high):''), sgn(e.A.d_low)], ['B 號', fmt(e.B.cur), fmt(e.B.low)+'～'+fmt(e.B.high), sgn(e.B.d_low)+'～'+sgn(e.B.d_high)], ['C 號（愛心）', fmt(e.C.cur), fmt(e.C.low)+'～'+fmt(e.C.high), sgn(e.C.d_low)+'～'+sgn(e.C.d_high)], ['D 號', fmt(e.D.cur), fmt(e.D.low), sgn(e.D.d_low)], ['整體平均', fmt(e.ALL.cur), fmt(e.ALL.low)+'～'+fmt(e.ALL.high), sgn(e.ALL.low-e.ALL.cur)+'～'+sgn(e.ALL.high-e.ALL.cur)], ['85–89 歲（原 A/B/D 號）', fmt(e.GE85.cur_shift_group), fmt(e.GE85.low)+'～'+fmt(e.GE85.high), sgn(e.GE85.low-e.GE85.cur_shift_group)+'～'+sgn(e.GE85.high-e.GE85.cur_shift_group)]];
+  const rg = AG.reg; const rows = [['A 號', fmt(e.A.cur), fmt(e.A.low)+(e.A.low!==e.A.high?'～'+fmt(e.A.high):''), sgn(e.A.d_low)], ['B 號', fmt(e.B.cur), fmt(e.B.low)+'～'+fmt(e.B.high), sgn(e.B.d_low)+'～'+sgn(e.B.d_high)], ['C 號（愛心）', fmt(e.C.cur), fmt(e.C.low)+'～'+fmt(e.C.high), sgn(e.C.d_low)+'～'+sgn(e.C.d_high)], ['D 號', fmt(e.D.cur), fmt(e.D.low), sgn(e.D.d_low)], ['整體平均', fmt(e.ALL.cur), fmt(e.ALL.low)+'～'+fmt(e.ALL.high), sgn(e.ALL.low-e.ALL.cur)+'～'+sgn(e.ALL.high-e.ALL.cur)], ['85 歲以上原 A/B/D 者', fmt(e.GE85.cur_shift_group), fmt(e.GE85.low)+'～'+fmt(e.GE85.high), sgn(e.GE85.low-e.GE85.cur_shift_group)+'～'+sgn(e.GE85.high-e.GE85.cur_shift_group)]];
   const pk = AG.peak_est;
   $('#ag-est').innerHTML = tableHTML(['', '現行', '調整後', '變動'], rows) + `<p class="note">估計方法：以 2025–2026 正常平日 8–18 時的小時資料，對各類別候藥分別回歸各類別張數（控制小時×星期×年）。C 每多 1 張／時：C 候藥 +${fmt(rg.C.beta.C,3)} 分、同組 B 候藥 +${fmt(rg.B.beta.C,3)} 分；A、D 不受 C 影響（係數不顯著）。區間上限只計同組效果，下限另扣跨組共同成分。線性估計，尖峰時段屬外推。</p><details><summary class="small">尖峰時段估計（主估計）</summary>${tableHTML(['時段','C 增加 張／時','B 現行→調整後','C 現行→調整後'], Object.keys(pk).map(h=>[h+'時', '+'+fmt0(pk[h].dC), fmt(pk[h].B.cur)+' → '+fmt(pk[h].B.new), fmt(pk[h].C.cur)+' → '+fmt(pk[h].C.new)]))}</details>`;
   $('#ag-grp').innerHTML = tableHTML(['組別','張／日 現行→調整後','張數增減','藥袋 現行→調整後','藥袋增減'], [['A 組', fmt0(g.A.cur)+' → '+fmt0(g.A.new), sgnp(pct(g.A.new,g.A.cur)), fmt0(g.A.cur_b)+' → '+fmt0(g.A.new_b), sgnp(pct(g.A.new_b,g.A.cur_b))], ['B＋C 組', fmt0(g.BC.cur)+' → '+fmt0(g.BC.new), sgnp(pct(g.BC.new,g.BC.cur)), fmt0(g.BC.cur_b)+' → '+fmt0(g.BC.new_b), sgnp(pct(g.BC.new_b,g.BC.cur_b))], ['D 組', fmt0(g.D.cur)+' → '+fmt0(g.D.new), sgnp(pct(g.D.new,g.D.cur)), fmt0(g.D.cur_b)+' → '+fmt0(g.D.new_b), sgnp(pct(g.D.new_b,g.D.cur_b))]]) + `<p class="note">B＋C 組內 C 號占比 ${fmt(g.BC.c_share_cur,1)}% → ${fmt(g.BC.c_share_new,1)}%。</p>`;
   $('#ag-rec').innerHTML = [
     `<div class="rec"><h4>① 愛心櫃台尖峰備援第二窗口</h4><p>週一至週五 9–10 時與 14–15 時 C 號將達 25–40 張／時（週一 14 時最高 ${fmt0(dh.new[0][dh.hours.indexOf(14)])} 張）。尖峰時由 B 台 PRN 或大 PRN 支援愛心櫃台發藥，並預先叫號分流。</p></div>`,
     `<div class="rec"><h4>② B＋C 組人力優先補強</h4><p>衝擊集中在 B＋C 組（張數 +${fmt(pct(g.BC.new,g.BC.cur),1)}%、藥袋 +${fmt(pct(g.BC.new_b,g.BC.cur_b),1)}%）。PRN 救水順序在尖峰時以 B 台為先；可將 ①「8 時 +2 人」的其中 1 人配置到 B 台。</p></div>`,
-    `<div class="rec"><h4>③ 85–89 歲慢箋導向預約領藥</h4><p>移轉者中現場慢箋僅約 ${fmt0(AG.by_year[2026].shift.D)} 張／日，「藥來速」預約領藥可分流的量有限；主力仍是第二窗口與 B 台支援，宣導可同步進行。</p></div>`,
-    `<div class="rec"><h4>④ 依年齡分階段、可計數的判準</h4><p>若推動，先將門檻降到 88 歲試行一個月（概估 ${fmt0((AG.by_year[2026].shift.A+AG.by_year[2026].shift.B+AG.by_year[2026].shift.D)*0.4)} 張／日）。主判準（與試行前一月同口徑比較）：愛心櫃台單小時 ≥40 張每月 ≤5 次、試行期間愛心號仍比 B 號快 ≥0.5 分、B 號候藥 >20 分的小時數不多於前一月、相關客訴不高於前一月；未達即退回 90 歲。達標再降至 85 歲。</p></div>`,
+    `<div class="rec"><h4>③ 85 歲以上慢箋導向預約領藥</h4><p>移轉者中現場慢箋僅約 ${fmt0(AG.by_year[2026].shift.D)} 張／日，「藥來速」預約領藥可分流的量有限；主力仍是第二窗口與 B 台支援，宣導可同步進行。</p></div>`,
+    `<div class="rec"><h4>④ 依年齡分階段、可計數的判準</h4><p>若推動，先將門檻降到 88 歲試行一個月（概估 ${fmt0((AG.by_year[2026].shift.A+AG.by_year[2026].shift.B+AG.by_year[2026].shift.D)*0.4)} 張／日）。結果型判準（與試行前一月同口徑比較）：愛心號仍比 B 號快 ≥0.5 分、C 號候藥不高於現行 +1 分、B 號候藥 >20 分的小時數不多於前一月、首次衛教當日完成率不低於現行、愛心號相關客訴 ≤1 件／月；未達即退回 90 歲，達標再降至 85 歲。單小時 ≥40 張為啟動第二窗口的觸發條件。</p></div>`,
     `<div class="rec"><h4>⑤ 與 D 號儲位調整併行時</h4><p>先前評估：D 儲位調整 3–5 格可讓 D 候藥維持約 14 分，但無法紓解 B＋C 組；20 格以上需先延長 D 台開台時段或增加人力。</p></div>`,
-    `<div class="rec"><h4>⑥ 評估結論（10/15 更新）：建議維持 90 歲</h4><p>愛心號現僅比 B 號快 ${fmt(e.B.cur-e.C.cur,1)} 分，改後只差 ${fmt(e.B.low-e.C.high,1)}～${fmt(e.B.high-e.C.low,1)} 分、早上尖峰持平，優先效果消失；愛心櫃台另負責全院門診特殊劑型衛教，量增後會排擠衛教。85–89 歲長者個人雖快約 ${fmt(e.GE85.cur_shift_group-e.GE85.high,1)} 分（有座位與專人說明），仍建議維持 90 歲；若院方推動則依 ①～⑤ 配套。</p></div>`,
+    `<div class="rec"><h4>⑥ 評估結論（10/15 更新）：建議維持 90 歲</h4><p>愛心號現僅比 B 號快 ${fmt(e.B.cur-e.C.cur,1)} 分，改後只差 ${fmt(e.B.low-e.C.high,1)}～${fmt(e.B.high-e.C.low,1)} 分、早上尖峰持平，優先效果消失；愛心櫃台另負責全院門診特殊劑型衛教，量增後會排擠衛教。改發者個人雖快約 ${fmt(e.GE85.cur_shift_group-e.GE85.high,1)} 分（有座位與專人說明），仍建議維持 90 歲；若院方推動則依 ①～⑤ 配套。</p></div>`,
   ].join('');
 }
 function sgn(v){ return (v>0?'+':'')+fmt(v,1); } function sgnp(v){ return (v>0?'+':'')+fmt(v,1)+'%'; }
